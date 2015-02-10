@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 public class FS_Utils {
     /**
@@ -86,24 +87,21 @@ public class FS_Utils {
      * @throws IOException if the file is not found
      */
     private void scanZip(File file) throws IOException{
-        ZipFile tmpZipFile = new ZipFile(this.getRootDir()+"\\"+file.getName());
-        Enumeration zipEntries = tmpZipFile.entries();
-
-        while (zipEntries.hasMoreElements()) {
-            ZipEntry tmpElement=((ZipEntry) zipEntries.nextElement());
-            if(tmpElement.getName().contains("191236")){
-                String source=this.getRootDir()+"\\"+tmpElement.getName().replace("/","\\");
-                String destination="C:\\Users\\matteo.francia3\\Desktop\\outputTest\\"+tmpElement.getName().split("/")[1];
-                this.logElement(source);
-                this.logElement(this.getRootDir()+"\\"+file.getName());
-                Files.copy( Paths.get(source),Paths.get(destination));
+        FileInputStream fin = new FileInputStream(this.getRootDir()+"\\"+file.getName());
+        BufferedInputStream bin = new BufferedInputStream(fin);
+        ZipInputStream zin = new ZipInputStream(bin);
+        ZipEntry ze = null;
+        while ((ze = zin.getNextEntry()) != null) {
+            if (ze.getName().contains("191236")) {
+                OutputStream out = new FileOutputStream("C:\\Users\\matteo.francia3\\Desktop\\outputTest\\"+ze.getName().split("/")[1]);
+                byte[] buffer = new byte[8192];
+                int len;
+                while ((len = zin.read(buffer)) != -1) {
+                    out.write(buffer, 0, len);
+                }
+                out.close();
+                break;
             }
-            // A DIR has been found INSIDE a ZIP
-//            if(((ZipEntry) zipEntries.nextElement()).isDirectory()){
-//                this.logElement("DIR IN ZIP ==> "+this.getRootDir()+"\\"+file.getName()+"\\"+((ZipEntry) zipEntries.nextElement()).getName());
-//                this.scan(this.getRootDir()+"\\"+file.getName()+"\\"+((ZipEntry) zipEntries.nextElement()).getName());
-//            }
-//            this.logElement(.getName());
         }
     }
 
