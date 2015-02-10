@@ -1,6 +1,8 @@
 package com.big.firb;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -24,7 +26,7 @@ public class FS_Utils {
             ROOT_DIR=new File(root_dir);
         }
         catch(NullPointerException npe){
-            System.out.println("ATTENZIONE!\n\nLa directory inserita non è valida!");
+            npe.printStackTrace();
         }
     }
 
@@ -63,7 +65,7 @@ public class FS_Utils {
      * @throws IOException
      */
     public void scan(String dir) throws IOException {
-        File actualdir = ROOT_DIR=new File(dir);
+        File actualdir =new File(dir);
         File[] actualDirFiles = actualdir.listFiles();
 
         for(int i=0;i<actualDirFiles.length;i++){
@@ -88,7 +90,20 @@ public class FS_Utils {
         Enumeration zipEntries = tmpZipFile.entries();
 
         while (zipEntries.hasMoreElements()) {
-            this.logElement(((ZipEntry) zipEntries.nextElement()).getName());
+            ZipEntry tmpElement=((ZipEntry) zipEntries.nextElement());
+            if(tmpElement.getName().contains("191236")){
+                String source=this.getRootDir()+"\\"+tmpElement.getName().replace("/","\\");
+                String destination="C:\\Users\\matteo.francia3\\Desktop\\outputTest\\"+tmpElement.getName().split("/")[1];
+                this.logElement(source);
+                this.logElement(this.getRootDir()+"\\"+file.getName());
+                Files.copy( Paths.get(source),Paths.get(destination));
+            }
+            // A DIR has been found INSIDE a ZIP
+//            if(((ZipEntry) zipEntries.nextElement()).isDirectory()){
+//                this.logElement("DIR IN ZIP ==> "+this.getRootDir()+"\\"+file.getName()+"\\"+((ZipEntry) zipEntries.nextElement()).getName());
+//                this.scan(this.getRootDir()+"\\"+file.getName()+"\\"+((ZipEntry) zipEntries.nextElement()).getName());
+//            }
+//            this.logElement(.getName());
         }
     }
 
