@@ -1,20 +1,25 @@
 package com.big.firb;
 
-import java.io.File;
+import java.util.Scanner;
 
 public class Main {
-    static String FILE_DIR="C:\\Users\\matteo.francia3\\Desktop\\TestDir";
+    private static String DEFAULT_DIR="C:\\Users\\matteo.francia3\\Desktop\\TestDir";
 
     public static void main(String[] args) {
-        File currentDir=new File(FILE_DIR);
+        Scanner user_input = new Scanner( System.in );
+        System.out.print("[Enter root dir to search:] ");
 
-        File[] dirElements=currentDir.listFiles();
-        for(int i=0;i<dirElements.length;i++){
-            System.out.println("["+i+"]"+dirElements[i]);
-            System.out.println("\t\t[IsDir] ==>"+dirElements[i].isDirectory());
-            System.out.println("\t\t[IsFile] ==>" + dirElements[i].isFile());
-            System.out.println("\t\t[IsZip] ==>" + (dirElements[i].getName().endsWith(".zip") || dirElements[i].getName().endsWith(".rar")));
+        FS_Utils fs_util;
+
+        if(user_input.next().equals("")){
+            fs_util=new FS_Utils(DEFAULT_DIR);
         }
+        else{
+            fs_util=new FS_Utils(user_input.next());
+        }
+
+
+
 
 
 
