@@ -1,11 +1,7 @@
 package com.big.firb;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class FS_Utils {
@@ -17,6 +13,10 @@ public class FS_Utils {
      * The log file
      */
     private static String LOG_FILE="C:\\Users\\matteo.francia3\\Desktop\\testlog.txt";
+    /**
+     * The dir where the matching file will be copied
+     */
+    private static String OUTPUT_DIR="C:\\Users\\matteo.francia3\\Desktop\\outputTest\\";
 
     /**
      * Instantiate a new FS_Utils object to recursively scan fs dirs.
@@ -82,7 +82,9 @@ public class FS_Utils {
     }
 
     /**
-     * Recursivey scan a zipped file
+     * Recursivey scan a zipped file and copy out a single file that match
+     * with a given criteria
+     *
      * @param file The zipped file
      * @throws IOException if the file is not found
      */
@@ -93,7 +95,7 @@ public class FS_Utils {
         ZipEntry ze = null;
         while ((ze = zin.getNextEntry()) != null) {
             if (ze.getName().contains("191236")) {
-                OutputStream out = new FileOutputStream("C:\\Users\\matteo.francia3\\Desktop\\outputTest\\"+ze.getName().split("/")[1]);
+                OutputStream out = new FileOutputStream(OUTPUT_DIR+ze.getName().split("/")[1]);
                 byte[] buffer = new byte[8192];
                 int len;
                 while ((len = zin.read(buffer)) != -1) {
