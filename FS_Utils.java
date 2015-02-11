@@ -12,11 +12,11 @@ public class FS_Utils {
     /**
      * The log file
      */
-    private static String LOG_FILE="C:\\Users\\matteo.francia3\\Desktop\\testlog.txt";
+    private static String LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\SearchClipIDinJSONname_LOG.txt";
     /**
      * The dir where the matching file will be copied
      */
-    private static String OUTPUT_DIR="C:\\Users\\matteo.francia3\\Desktop\\outputTest\\";
+    private static String OUTPUT_DIR="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\Extracted_Files";
 
     /**
      * Instantiate a new FS_Utils object to recursively scan fs dirs.
@@ -36,8 +36,7 @@ public class FS_Utils {
      *
      * @return the path of the actual ROOT_DIR
      */
-    public String getRootDir()
-    {
+    public String getRootDir() {
         return ROOT_DIR.getAbsolutePath();
     }
 

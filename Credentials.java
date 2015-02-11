@@ -1,11 +1,11 @@
 package com.big.firb;
 
 public class Credentials {
-    private static String db_sid_ita="";
-    private static String db_sid_eng="";
-    private static String db_sid_deu="";
-    private static String db_username="";
-    private static String db_password="";
+    private static String db_sid_ita="firbodsita";
+    private static String db_sid_eng="firbodseng";
+    private static String db_sid_deu="firbodsdeu";
+    private static String db_username="ods";
+    private static String db_password="ods";
 
     public static String[] getCredentials(int lang)
     {
