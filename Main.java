@@ -7,6 +7,7 @@ public class Main {
     private static String DEFAULT_REMOTE_DIR="\\\\137.204.74.121\\c$\\BrandwatchZIP\\ENGJSONPROCESSED";
     private static String DEFAULT_DIR="C:\\Users\\matteo.francia3\\Desktop\\TestDir";
 
+
     /**
      * Entry point: launch iteration according to the user input
      *
@@ -14,9 +15,12 @@ public class Main {
      */
     public static void main(String[] args) {
         Scanner user_input = new Scanner( System.in );
-        System.out.print("Enter root dir to search \n\t(type \"1\" for default or \"2\" for default on 137.204.74.121): ");
+        //System.out.print("Enter root dir to search \n\t(type \"1\" for default or \"2\" for default on 137.204.74.121): ");
+        System.out.print("Which langage would you like to search \n\t(type \"1\" for ITA, \"2\" for ENg and \"3\" for DEU): ");
 
-        FS_Utils fs_util;
+        Credentials.getCredentials(Integer.parseInt(user_input.next()));
+
+        /*FS_Utils fs_util;
 
         if(user_input.next().equals("1")){
             fs_util=new FS_Utils(DEFAULT_DIR);
@@ -32,7 +36,12 @@ public class Main {
             fs_util.scan();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        Connection conn = DbUtils.connect(db_sid,db_username,db_password);
+        DbOperations.getClipID()
+
+
 
     }
 }
