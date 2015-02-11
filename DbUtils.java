@@ -1,4 +1,4 @@
-package it.unibo.csr.big.webpoleu.kc;
+package com.big.firb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
