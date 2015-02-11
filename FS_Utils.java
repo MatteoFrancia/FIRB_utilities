@@ -18,17 +18,22 @@ public class FS_Utils {
      */
     private static String OUTPUT_DIR="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\Extracted_Files";
 
+    private static String[] ID_TO_SEARCH;
+
     /**
      * Instantiate a new FS_Utils object to recursively scan fs dirs.
      * @param root_dir the host file system full path to the directory to scan
      */
-    public FS_Utils(String root_dir){
+    public FS_Utils(String root_dir,String[] idToSearch){
         try{
             ROOT_DIR=new File(root_dir);
+
         }
         catch(NullPointerException npe){
             npe.printStackTrace();
         }
+
+        ID_TO_SEARCH=idToSearch;
     }
 
     /**
@@ -92,18 +97,27 @@ public class FS_Utils {
         BufferedInputStream bin = new BufferedInputStream(fin);
         ZipInputStream zin = new ZipInputStream(bin);
         ZipEntry ze = null;
-        while ((ze = zin.getNextEntry()) != null) {
-            if (ze.getName().contains("191236")) {
-                OutputStream out = new FileOutputStream(OUTPUT_DIR+ze.getName().split("/")[1]);
-                byte[] buffer = new byte[8192];
-                int len;
-                while ((len = zin.read(buffer)) != -1) {
-                    out.write(buffer, 0, len);
+
+        this.logElement("Scanning "+file.getName()+"...");
+
+        for(int i=0;i<ID_TO_SEARCH.length;i++){
+            boolean found = false;
+            while ((ze = zin.getNextEntry()) != null) {
+                if (ze.getName().contains(ID_TO_SEARCH[i])) {
+                    OutputStream out = new FileOutputStream(OUTPUT_DIR+ze.getName().split("/")[1]);
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while ((len = zin.read(buffer)) != -1) {
+                        out.write(buffer, 0, len);
+                    }
+                    out.close();
+                    found=true;
+                    this.logElement(ID_TO_SEARCH[i]+" ==> "+found);
+                    break;
                 }
-                out.close();
-                break;
             }
         }
+
     }
 
     /**

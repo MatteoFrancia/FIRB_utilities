@@ -1,5 +1,6 @@
 package com.big.firb;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner user_input = new Scanner( System.in );
         // System.out.print("Enter root dir to search \n\t(type \"1\" for default or \"2\" for default on 137.204.74.121): ");
-        System.out.print("Which langage would you like to search? \n\t\t- \"1\" for ITA\n\t\t- \"2\" for ENG\n\t\t- \"3\" for DEU\n ");
+        System.out.print("Which language would you like to search? \n\t\t- \"1\" for ITA\n\t\t- \"2\" for ENG\n\t\t- \"3\" for DEU\n ");
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -46,30 +47,14 @@ public class Main {
         System.out.println("QUERY EXECUTED ==> "+dateFormat.format(new Date()));
         System.out.println("CLIP ID RETRIEVED ==> "+clipID.length);
 
-        FS_Utils fs_util;
+        FS_Utils fs_util=new FS_Utils(DEFAULT_REMOTE_DIR,clipID);
 
-
-
-
-        /*FS_Utils fs_util;
-
-        if(user_input.next().equals("1")){
-            fs_util=new FS_Utils(DEFAULT_DIR);
-        }
-        else if(user_input.next().equals("2")){
-            fs_util=new FS_Utils(DEFAULT_REMOTE_DIR);
-        }
-        else{
-            fs_util=new FS_Utils(user_input.next());
-        }
-
+        System.out.println("LAUNCH SEARCH ==> "+dateFormat.format(new Date()));
         try {
             fs_util.scan();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
-
-
-
+        }
+        System.out.println("SEARCH EXECUTED ==> "+dateFormat.format(new Date()));
     }
 }
