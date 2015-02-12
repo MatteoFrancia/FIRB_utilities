@@ -1,6 +1,7 @@
 package com.big.firb;
 
 import java.io.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -17,7 +18,7 @@ public class FS_Utils {
     /**
      * The clip id extraction from JSON log file
      */
-    private static String EXTRACTID_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\SearchClipIDinJSONname_LOG.txt";
+    private static String EXTRACTID_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\ExtractIDs_LOG.txt";
     /**
      * The dir where the matching file will be copied
      */
@@ -147,11 +148,14 @@ public class FS_Utils {
      *
      * @return an ArrayList with all the IDs extracted
      */
-    public ArrayList<String> extractIDFromFileName(){
+    public ArrayList<String> extractIDFromFileName() {
         ArrayList<String> clipIDs = new ArrayList<String>();
 
-        // To Be Implemented
+        File[] dirElements = ROOT_DIR.listFiles();
 
+        for (int i = 0; i < dirElements.length; i++) {
+            clipIDs.add(dirElements[i].getName().split("_")[1]);
+        }
         return clipIDs;
     }
 
@@ -161,8 +165,17 @@ public class FS_Utils {
      *
      * @param clipIDs the IDs to search
      */
-    public void checkClipStatus(ArrayList<String> clipIDs){
+    public void checkClipStatus(Connection conn,ArrayList<String> clipIDs){
+        int[] tmpStatus=new int[3];
 
+        for(int i=0;i<clipIDs.size();i++){
+            tmpStatus = DbOperations.getClipStatus(conn,Integer.parseInt(clipIDs.get(i)));
+            try {
+                this.logElement(tmpStatus[0]+" - "+tmpStatus[1]+" - "+tmpStatus[2],EXTRACTID_LOG_FILE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

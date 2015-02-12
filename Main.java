@@ -76,10 +76,22 @@ public class Main {
 
                 System.out.println("LAUNCH EXTRACTION ==> "+dateFormat.format(new Date()));
                 clipIDs = fs_util.extractIDFromFileName();
-                System.out.println("EXTRACTION COMPLETED ==> "+dateFormat.format(new Date()));
+                System.out.println("EXTRACTION COMPLETED ("+clipIDs.size()+")elements extracted) ==> "+dateFormat.format(new Date()));
+
+                // Instantiate credentials according to the language chosen by the user
+                int ita=1;
+                int eng=2;
+                int deu=3;
+                String[] credentials = Credentials.getCredentials(eng);
+                String db_username=credentials[0];
+                String db_password=credentials[1];
+                String db_sid=credentials[2];
+
+                // Instantiate a connection to Oracle
+                Connection conn = DbUtils.connect(db_sid,db_username,db_password);
 
                 System.out.println("LAUNCH CLIP CHECK ==> "+dateFormat.format(new Date()));
-                fs_util.checkClipStatus(clipIDs);
+                fs_util.checkClipStatus(conn,clipIDs);
                 System.out.println("CLIP CHECK COMPLETED ==> "+dateFormat.format(new Date()));
 
                 break;
