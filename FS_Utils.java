@@ -37,6 +37,20 @@ public class FS_Utils {
     }
 
     /**
+     * Instantiate a new FS_Utils object to recursively scan fs dirs.
+     * @param root_dir the host file system full path to the directory to scan
+     */
+    public FS_Utils(String root_dir){
+        try{
+            ROOT_DIR=new File(root_dir);
+
+        }
+        catch(NullPointerException npe){
+            npe.printStackTrace();
+        }
+    }
+
+    /**
      * Getter for the ROOT_DIR name
      *
      * @return the path of the actual ROOT_DIR
@@ -129,5 +143,12 @@ public class FS_Utils {
         PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(LOG_FILE, true)));
         writer.println(element);
         writer.close();
+    }
+
+    /**
+     * Extract ID from JSON clip name
+     */
+    public void extractIDFromFileName(){
+        // To Be Implemented
     }
 }
