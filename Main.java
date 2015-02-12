@@ -40,34 +40,34 @@ public class Main {
         switch (user_input.next().toLowerCase()){
             case "1":
                 System.out.print("TEMPORARY DISABLED");
-//                System.out.print("Which language would you like to search? \n\t\t- \"1\" for ITA\n\t\t- \"2\" for ENG\n\t\t- \"3\" for DEU\n ");
-//                // Instantiate credentials according to the language chosen by the user
-//                String[] credentials = Credentials.getCredentials(Integer.parseInt(user_input.next()));
-//                String db_sid=credentials[2];
-//                String db_username=credentials[0];
-//                String db_password=credentials[1];
-//
-//                // Instantiate a connection to Oracle
-//                Connection conn = DbUtils.connect(db_sid,db_username,db_password);
-//
-//                // Launch search and log times on console
-//                System.out.println("LAUNCH QUERY ==> "+dateFormat.format(new Date()));
-//
-//                String[] clipID = DbOperations.getClipID(conn);
-//                //String[] clipID = TEST_ARRAY;
-//
-//                System.out.println("QUERY EXECUTED ==> "+dateFormat.format(new Date()));
-//                System.out.println("CLIP ID RETRIEVED ==> "+clipID.length);
-//
-//                fs_util=new FS_Utils(DEFAULT_REMOTE_DIR,clipID);
-//
-//                System.out.println("LAUNCH SEARCH ==> "+dateFormat.format(new Date()));
-//                try {
-//                    fs_util.scan();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                System.out.println("SEARCH EXECUTED ==> "+dateFormat.format(new Date()));
+                System.out.print("Which language would you like to search? \n\t\t- \"1\" for ITA\n\t\t- \"2\" for ENG\n\t\t- \"3\" for DEU\n ");
+                // Instantiate credentials according to the language chosen by the user
+                String[] credentials = Credentials.getCredentials(Integer.parseInt(user_input.next()));
+                String db_sid=credentials[2];
+                String db_username=credentials[0];
+                String db_password=credentials[1];
+
+                // Instantiate a connection to Oracle
+                Connection conn = DbUtils.connect(db_sid,db_username,db_password);
+
+                // Launch search and log times on console
+                System.out.println("LAUNCH QUERY ==> "+dateFormat.format(new Date()));
+
+                String[] clipID = DbOperations.getClipID(conn);
+                //String[] clipID = TEST_ARRAY;
+
+                System.out.println("QUERY EXECUTED ==> "+dateFormat.format(new Date()));
+                System.out.println("CLIP ID RETRIEVED ==> "+clipID.length);
+
+                fs_util=new FS_Utils(DEFAULT_REMOTE_DIR,clipID);
+
+                System.out.println("LAUNCH SEARCH ==> "+dateFormat.format(new Date()));
+                try {
+                    fs_util.scan();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("SEARCH EXECUTED ==> "+dateFormat.format(new Date()));
 
                 break;
             case "2":
