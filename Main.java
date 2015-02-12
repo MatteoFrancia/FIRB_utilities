@@ -37,18 +37,22 @@ public class Main {
 
         FS_Utils fs_util=null;
 
+        String[] credentials = null;
+        String db_sid, db_username, db_password;
+        Connection conn = null;
+
         switch (user_input.next().toLowerCase()){
             case "1":
                 System.out.print("TEMPORARY DISABLED");
                 System.out.print("Which language would you like to search? \n\t\t- \"1\" for ITA\n\t\t- \"2\" for ENG\n\t\t- \"3\" for DEU\n ");
                 // Instantiate credentials according to the language chosen by the user
-                String[] credentials = Credentials.getCredentials(Integer.parseInt(user_input.next()));
-                String db_sid=credentials[2];
-                String db_username=credentials[0];
-                String db_password=credentials[1];
+                credentials = Credentials.getCredentials(Integer.parseInt(user_input.next()));
+                db_sid=credentials[2];
+                db_username=credentials[0];
+                db_password=credentials[1];
 
                 // Instantiate a connection to Oracle
-                Connection conn = DbUtils.connect(db_sid,db_username,db_password);
+                conn = DbUtils.connect(db_sid,db_username,db_password);
 
                 // Launch search and log times on console
                 System.out.println("LAUNCH QUERY ==> "+dateFormat.format(new Date()));
@@ -82,13 +86,13 @@ public class Main {
                 int ita=1;
                 int eng=2;
                 int deu=3;
-                String[] credentials = Credentials.getCredentials(eng);
-                String db_username=credentials[0];
-                String db_password=credentials[1];
-                String db_sid=credentials[2];
+                credentials = Credentials.getCredentials(eng);
+                db_username=credentials[0];
+                db_password=credentials[1];
+                db_sid=credentials[2];
 
                 // Instantiate a connection to Oracle
-                Connection conn = DbUtils.connect(db_sid,db_username,db_password);
+                conn = DbUtils.connect(db_sid,db_username,db_password);
 
                 System.out.println("LAUNCH CLIP CHECK ==> "+dateFormat.format(new Date()));
                 fs_util.checkClipStatus(conn,clipIDs);
