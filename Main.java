@@ -17,7 +17,9 @@ public class Main {
     /**
      * Test directory
      */
-    private static String DEFAULT_DIR="C:\\Users\\matteo.francia3\\Desktop\\TestDir";
+    private static String TEST_DIR="C:\\Users\\matteo.francia3\\Desktop\\TestDir";
+
+    private static String[] TEST_ARRAY = new String[]{"191354","123456","321654","098876","865543"};
 
 
     /**
@@ -31,6 +33,8 @@ public class Main {
         System.out.print("Would you like to search not analyzed clip in JSON stored file (1) ro to extract clip ID from JSON file name (2)?\n");
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        FS_Utils fs_util=null;
 
         switch (user_input.next().toLowerCase()){
             case "1":
@@ -48,11 +52,12 @@ public class Main {
                 System.out.println("LAUNCH QUERY ==> "+dateFormat.format(new Date()));
 
                 String[] clipID = DbOperations.getClipID(conn);
+                //String[] clipID = TEST_ARRAY;
 
                 System.out.println("QUERY EXECUTED ==> "+dateFormat.format(new Date()));
                 System.out.println("CLIP ID RETRIEVED ==> "+clipID.length);
 
-                FS_Utils fs_util=new FS_Utils(DEFAULT_REMOTE_DIR,clipID);
+                fs_util=new FS_Utils(DEFAULT_REMOTE_DIR,clipID);
 
                 System.out.println("LAUNCH SEARCH ==> "+dateFormat.format(new Date()));
                 try {
@@ -63,14 +68,13 @@ public class Main {
                 System.out.println("SEARCH EXECUTED ==> "+dateFormat.format(new Date()));
                 break;
             case "2":
-                System.out.println("SCISC");
-//            FS_Utils fs_util=new FS_Utils(JSON_REMOTE_DIR);
-//            System.out.println("LAUNCH EXTRACTION ==> "+dateFormat.format(new Date()));
-//            fs_util.extractIDFromFileName();
-//            System.out.println("EXTRACTION COMPLETED ==> "+dateFormat.format(new Date()));
+                fs_util=new FS_Utils(JSON_REMOTE_DIR);
+                System.out.println("LAUNCH EXTRACTION ==> "+dateFormat.format(new Date()));
+                fs_util.extractIDFromFileName();
+                System.out.println("EXTRACTION COMPLETED ==> "+dateFormat.format(new Date()));
                 break;
             default:
                 System.out.println("Errore leggendo l'input dell'utente");
         }
-    }
+}
 }

@@ -16,7 +16,7 @@ public class FS_Utils {
     /**
      * The dir where the matching file will be copied
      */
-    private static String OUTPUT_DIR="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\Extracted_Files";
+    private static String OUTPUT_DIR="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\Extracted_Files\\";
 
     private static String[] ID_TO_SEARCH;
 
@@ -67,6 +67,7 @@ public class FS_Utils {
         File[] dirElements=ROOT_DIR.listFiles();
 
         for(int i=0;i<dirElements.length;i++){
+            this.logElement("["+i+"] "+dirElements[i].getName());
             if((dirElements[i].getName().endsWith(".zip") || dirElements[i].getName().endsWith(".rar"))){
                 this.scanZip(dirElements[i]);
             }
@@ -112,22 +113,24 @@ public class FS_Utils {
         ZipInputStream zin = new ZipInputStream(bin);
         ZipEntry ze = null;
 
-        this.logElement("Scanning "+file.getName()+"...");
+        //this.logElement("\t\tScanning "+file.getName()+"...");
 
-        for(int i=0;i<ID_TO_SEARCH.length;i++){
-            boolean found = false;
-            while ((ze = zin.getNextEntry()) != null) {
-                if (ze.getName().contains(ID_TO_SEARCH[i])) {
-                    OutputStream out = new FileOutputStream(OUTPUT_DIR+ze.getName().split("/")[1]);
-                    byte[] buffer = new byte[8192];
-                    int len;
-                    while ((len = zin.read(buffer)) != -1) {
-                        out.write(buffer, 0, len);
+        while ((ze = zin.getNextEntry()) != null) {
+            if(!ze.isDirectory()){
+                for (int i = 0; i < ID_TO_SEARCH.length; i++) {
+                    //this.logElement("====================================== ["+i+"] ============================================================");
+                    //this.logElement("\t\t\t\t" + ze.getName() + ".contains(_" + ID_TO_SEARCH[i] + "_) ==> " + (ze.getName().contains("_" + ID_TO_SEARCH[i] + "_")));
+                    if (ze.getName().contains("_" + ID_TO_SEARCH[i] + "_")) {
+                        OutputStream out = new FileOutputStream(OUTPUT_DIR + ze.getName().split("/")[1]);
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = zin.read(buffer)) != -1) {
+                            out.write(buffer, 0, len);
+                        }
+                        out.close();
+                        this.logElement("\t\t\t\t" + ID_TO_SEARCH[i] + " ==> FOUND");
+                        break;
                     }
-                    out.close();
-                    found=true;
-                    this.logElement(ID_TO_SEARCH[i]+" ==> "+found);
-                    break;
                 }
             }
         }
