@@ -1,6 +1,7 @@
 package com.big.firb;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -10,9 +11,13 @@ public class FS_Utils {
      */
     private static File ROOT_DIR;
     /**
-     * The log file
+     * The SearchClipIDinJSONname procedure log file
      */
-    private static String LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\SearchClipIDinJSONname_LOG.txt";
+    private static String SEARCH_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\SearchClipIDinJSONname_LOG.txt";
+    /**
+     * The clip id extraction from JSON log file
+     */
+    private static String EXTRACTID_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\SearchClipIDinJSONname_LOG.txt";
     /**
      * The dir where the matching file will be copied
      */
@@ -67,7 +72,7 @@ public class FS_Utils {
         File[] dirElements=ROOT_DIR.listFiles();
 
         for(int i=0;i<dirElements.length;i++){
-            this.logElement("["+i+"] "+dirElements[i].getName());
+            this.logElement("["+i+"] "+dirElements[i].getName(),SEARCH_LOG_FILE);
             if((dirElements[i].getName().endsWith(".zip") || dirElements[i].getName().endsWith(".rar"))){
                 this.scanZip(dirElements[i]);
             }
@@ -128,7 +133,7 @@ public class FS_Utils {
                             out.write(buffer, 0, len);
                         }
                         out.close();
-                        this.logElement("\t\t\t\t" + ID_TO_SEARCH[i] + " ==> FOUND");
+                        this.logElement("\t\t\t\t" + ID_TO_SEARCH[i] + " ==> FOUND",SEARCH_LOG_FILE);
                         break;
                     }
                 }
@@ -138,20 +143,36 @@ public class FS_Utils {
     }
 
     /**
+     * Extract ID from JSON clip name
+     *
+     * @return an ArrayList with all the IDs extracted
+     */
+    public ArrayList<String> extractIDFromFileName(){
+        ArrayList<String> clipIDs = new ArrayList<String>();
+
+        // To Be Implemented
+
+        return clipIDs;
+    }
+
+    /**
+     * For each clip id in the clipIDs ArrayList check if on the ods is there some written sentence
+     * and the is_processed flag value
+     *
+     * @param clipIDs the IDs to search
+     */
+    public void checkClipStatus(ArrayList<String> clipIDs){
+
+    }
+
+    /**
      * Log to file element retrieved by the scanning routines
      * @param element the element retrieved  (the one to log)
      * @throws IOException if the log fil is not found
      */
-    private void logElement(String element) throws IOException{
-        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(LOG_FILE, true)));
+    private void logElement(String element,String logFile) throws IOException{
+        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(logFile, true)));
         writer.println(element);
         writer.close();
-    }
-
-    /**
-     * Extract ID from JSON clip name
-     */
-    public void extractIDFromFileName(){
-        // To Be Implemented
     }
 }
