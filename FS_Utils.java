@@ -157,8 +157,7 @@ public class FS_Utils {
                         }
                     }
                 }
-                this.logElement(this.getRootDir()+"\\"+file.getName()+ " ==> "+jsonFound,COUNT_LOG_FILE);
-
+                this.logElement(file.getName()+ " ==> "+jsonFound,COUNT_LOG_FILE);
                 break;
             default:
                 break;

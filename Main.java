@@ -113,8 +113,6 @@ public class Main {
                     e.printStackTrace();
                 }
                 System.out.println("COUNT EXECUTED ==> "+dateFormat.format(new Date()));
-
-
             default:
                 System.out.println("[Errore leggendo l'input dell'utente]");
         }
