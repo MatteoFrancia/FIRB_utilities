@@ -15,6 +15,11 @@ public class Main {
     private static String DEFAULT_REMOTE_DIR="\\\\137.204.74.121\\c$\\BrandwatchZIP\\ENGJSONPROCESSED";
 
     private static String JSON_REMOTE_DIR="\\\\137.204.74.121\\c$\\BrandwatchZIP\\ENG_STAGING";
+
+    private static int STANDARD_MODE=1;
+
+    private static int COUNT_MODE=2;
+
     /**
      * Test directory
      */
@@ -31,7 +36,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner user_input = new Scanner( System.in );
         // System.out.print("Enter root dir to search \n\t(type \"1\" for default or \"2\" for default on 137.204.74.121): ");
-        System.out.print("Would you like to search not analyzed clip in JSON stored file (1) ro to extract clip ID from JSON file name (2)?\n");
+        System.out.print("Would you like to:\n[1] search not analyzed clip in JSON stored file\n[2] extract clip ID from JSON file name?\n[3] count stored JSON files\n");
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -43,7 +48,6 @@ public class Main {
 
         switch (user_input.next().toLowerCase()){
             case "1":
-                System.out.print("TEMPORARY DISABLED");
                 System.out.print("Which language would you like to search? \n\t\t- \"1\" for ITA\n\t\t- \"2\" for ENG\n\t\t- \"3\" for DEU\n ");
                 // Instantiate credentials according to the language chosen by the user
                 credentials = Credentials.getCredentials(Integer.parseInt(user_input.next()));
@@ -67,7 +71,7 @@ public class Main {
 
                 System.out.println("LAUNCH SEARCH ==> "+dateFormat.format(new Date()));
                 try {
-                    fs_util.scan();
+                    fs_util.scan(STANDARD_MODE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -99,8 +103,20 @@ public class Main {
                 System.out.println("CLIP CHECK COMPLETED ==> "+dateFormat.format(new Date()));
 
                 break;
+            case "3":
+                fs_util=new FS_Utils(DEFAULT_REMOTE_DIR);
+
+                System.out.println("LAUNCH COUNT ==> "+dateFormat.format(new Date()));
+                try {
+                    fs_util.scan(COUNT_MODE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("COUNT EXECUTED ==> "+dateFormat.format(new Date()));
+
+
             default:
-                System.out.println("Errore leggendo l'input dell'utente");
+                System.out.println("[Errore leggendo l'input dell'utente]");
         }
 }
 }

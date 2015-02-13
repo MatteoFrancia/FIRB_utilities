@@ -16,6 +16,10 @@ public class FS_Utils {
      */
     private static String SEARCH_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\SearchClipIDinJSONname_LOG.txt";
     /**
+     * The countJSON procedure log file
+     */
+    private static String COUNT_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\CountJSON_LOG.txt";
+    /**
      * The clip id extraction from JSON log file
      */
     private static String EXTRACTID_LOG_FILE="C:\\Users\\matteo.francia3\\Documents\\Developing\\Java\\SearchClipIDinJSONname\\ExtractIDs_LOG.txt";
@@ -69,16 +73,16 @@ public class FS_Utils {
      * Recursively scan the ROOT_DIR directory
      * @throws IOException if the element is not found
      */
-    public void scan() throws IOException {
+    public void scan(int scanMode) throws IOException {
         File[] dirElements=ROOT_DIR.listFiles();
 
         for(int i=0;i<dirElements.length;i++){
             this.logElement("["+i+"] "+dirElements[i].getName(),SEARCH_LOG_FILE);
             if((dirElements[i].getName().endsWith(".zip") || dirElements[i].getName().endsWith(".rar"))){
-                this.scanZip(dirElements[i]);
+                this.scanZip(dirElements[i],scanMode);
             }
             else if(dirElements[i].isDirectory()){
-                this.scan(dirElements[i].getAbsolutePath());
+                this.scan(dirElements[i].getAbsolutePath(),scanMode);
             }else if(dirElements[i].isFile()){
                 //do nothing
             }
@@ -90,16 +94,16 @@ public class FS_Utils {
      * @param dir the folder to scan
      * @throws IOException
      */
-    public void scan(String dir) throws IOException {
+    public void scan(String dir,int scanMode) throws IOException {
         File actualdir =new File(dir);
         File[] actualDirFiles = actualdir.listFiles();
 
         for(int i=0;i<actualDirFiles.length;i++){
             if((actualDirFiles[i].getName().endsWith(".zip") || actualDirFiles[i].getName().endsWith(".rar"))){
-                this.scanZip(actualDirFiles[i]);
+                this.scanZip(actualDirFiles[i],scanMode);
             }
             else if(actualDirFiles[i].isDirectory()){
-                this.scan(actualDirFiles[i].getAbsolutePath());
+                this.scan(actualDirFiles[i].getAbsolutePath(),scanMode);
             }else if(actualDirFiles[i].isFile()){
                 //do nothing
             }
@@ -107,13 +111,13 @@ public class FS_Utils {
     }
 
     /**
-     * Recursivey scan a zipped file and copy out a single file that match
+     * Recursively scan a zipped file and copy out a single file that match
      * with a given criteria
      *
      * @param file The zipped file
      * @throws IOException if the file is not found
      */
-    private void scanZip(File file) throws IOException{
+    private void scanZip(File file,int scanMode) throws IOException{
         FileInputStream fin = new FileInputStream(this.getRootDir()+"\\"+file.getName());
         BufferedInputStream bin = new BufferedInputStream(fin);
         ZipInputStream zin = new ZipInputStream(bin);
@@ -121,24 +125,43 @@ public class FS_Utils {
 
         //this.logElement("\t\tScanning "+file.getName()+"...");
 
-        while ((ze = zin.getNextEntry()) != null) {
-            if(!ze.isDirectory()){
-                for (int i = 0; i < ID_TO_SEARCH.length; i++) {
-                    //this.logElement("====================================== ["+i+"] ============================================================");
-                    //this.logElement("\t\t\t\t" + ze.getName() + ".contains(_" + ID_TO_SEARCH[i] + "_) ==> " + (ze.getName().contains("_" + ID_TO_SEARCH[i] + "_")));
-                    if (ze.getName().contains("_" + ID_TO_SEARCH[i] + "_")) {
-                        OutputStream out = new FileOutputStream(OUTPUT_DIR + ze.getName().split("/")[1]);
-                        byte[] buffer = new byte[8192];
-                        int len;
-                        while ((len = zin.read(buffer)) != -1) {
-                            out.write(buffer, 0, len);
+        switch(scanMode){
+            case 1:
+
+                while ((ze = zin.getNextEntry()) != null) {
+                    if(!ze.isDirectory()){
+                        for (int i = 0; i < ID_TO_SEARCH.length; i++) {
+                            //this.logElement("====================================== ["+i+"] ============================================================");
+                            //this.logElement("\t\t\t\t" + ze.getName() + ".contains(_" + ID_TO_SEARCH[i] + "_) ==> " + (ze.getName().contains("_" + ID_TO_SEARCH[i] + "_")));
+                            if (ze.getName().contains("_" + ID_TO_SEARCH[i] + "_")) {
+                                OutputStream out = new FileOutputStream(OUTPUT_DIR + ze.getName().split("/")[1]);
+                                byte[] buffer = new byte[8192];
+                                int len;
+                                while ((len = zin.read(buffer)) != -1) {
+                                    out.write(buffer, 0, len);
+                                }
+                                out.close();
+                                this.logElement("\t\t\t\t" + ID_TO_SEARCH[i] + " ==> FOUND",SEARCH_LOG_FILE);
+                                break;
+                            }
                         }
-                        out.close();
-                        this.logElement("\t\t\t\t" + ID_TO_SEARCH[i] + " ==> FOUND",SEARCH_LOG_FILE);
-                        break;
                     }
                 }
-            }
+                break;
+            case 2:
+                int jsonFound=0;
+                while ((ze = zin.getNextEntry()) != null) {
+                    if(!ze.isDirectory()){
+                        if (ze.getName().contains(".json")) {
+                            jsonFound++;
+                        }
+                    }
+                }
+                this.logElement(this.getRootDir()+"\\"+file.getName()+ " ==> "+jsonFound,COUNT_LOG_FILE);
+
+                break;
+            default:
+                break;
         }
 
     }
